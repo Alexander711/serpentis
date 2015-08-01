@@ -1,100 +1,117 @@
 $(function () {
-    $("#send_message").click(function () {
-        var name_user = $('#form_application_1 #name_user').val();
-        var email_user = $('#form_application_1 #email_user').val();
-        var message_user = $("#form_application_1 #message_user").val();
-
-        var error_flag = 0;
-
-        if (name_user == '') {
-            $('#empty_name').show();
-            $("#name_user").addClass("red_field");
-
-            error_flag++;
-        } else {
-            $('#empty_name').hide();
-            $("#name_user").removeClass("red_field");
-        }
-
-        if (email_user == '') {
-            $('#empty_email').show();
-            $("#email_user").addClass("red_field");
-            
-            error_flag++;
-        } else {
-            $('#empty_email').hide();
-            $("#email_user").removeClass("red_field");
-        }
-
-        if (message_user == '') {
-            $('#empty_message').show();
-            $("#message_user").addClass("red_field");
-            
-            error_flag++;
-        } else {
-            $('#empty_message').hide();
-            $("#message_user").removeClass("red_field");
-        }
-
-        var regex = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/i;
-        var is_email = regex.exec(email_user);
-
-        if (email_user != '' && is_email == null) {
-            $('#incorrect_email').show();
-            $("#email_user").addClass("red_field");
-
-            error_flag++;
-        } else if(email_user != '' && is_email != null) {
-            $('#incorrect_email').hide();
-            $("#email_user").removeClass("red_field");
-        }
-
-        if (error_flag == 0) {
-            show_pop_up_captcha();
-        }
+    $('#site_data').click(function () {
+        $('#site_data_form').toggle("slow");
     });
 
-    $('.close_pop_up_captcha,#popup_overlay_captcha').click(function () {
-        hide_pop_up_captcha();
+    $('#way_priv_transport').click(function () {
+        $('#way_priv_transport_form').toggle("slow");
     });
 
-    $("#send_captcha").click(function () {
-        var captcha = $("input[name='captcha']", '#form_captcha').val();
+    $('#way_pub_transport').click(function () {
+        $('#way_pub_transport_form').toggle("slow");
+    });
 
-        $.post("/app_one/valid_captcha", {"captcha": captcha}, function (event) {
-            if (event != 'ok') {
-                $('#incorrect_captcha').show();
-            } else {
-                hide_pop_up_captcha();
+    $('#taxi').click(function () {
+        $('#taxi_form').toggle("slow");
+    });
 
-                var name_user = $('#form_application_1 #name_user').val();
-                var email_user = $('#form_application_1 #email_user').val();
-                var message_user = $("#form_application_1 #message_user").val();
+    $('#rent_car').click(function () {
+        $('#rent_car_form').toggle("slow");
+    });
 
-                $.post("/app_one/send_mess_to_app_two", {"name_user": name_user, "email_user": email_user, "message_user": message_user}, function (event) {
-                    if (event == 'ok') {
-                        alert('Ваше сообщение отправлено');
-                    } else if (event == 'error_form') {
-                        alert('Заполните правильно форму');
-                    } else {
-                        alert('Произошла ошибка при отправке');
-                    }
-                }, 'json');
+    $('#new_img').click(function () {
+        $('#new_img_form').toggle("slow");
+    });
+
+    $('input[type=file]').change(function () {
+        $("#default_img").prop('checked', false);
+
+        $(".img_widget_from_db").hide();
+
+        $("#img_marker_from_db").val('');
+        $("#img_map_from_db").val('');
+    });
+
+    $('#default_img').change(function () {
+        $(".img_widget_from_db").hide();
+
+        $("#img_marker_from_db").val('');
+        $("#img_map_from_db").val('');
+    });
+
+    $("#add_widget_form").on('submit', function (e) {
+        var error_mass = validate_add_widget_form();
+        var error_mess = '';
+
+        if (error_mass.length != 0) {
+            e.preventDefault();
+
+            for (i = 0; i < error_mass.length; i++) {
+                error_mess = error_mess + '<span>' + error_mass[i] + '</span>'
+                $('.errors_add_widget').html(error_mess);
+                $('.errors_add_widget').show().delay(5000).fadeOut(1000);
             }
-        }, "json");
+        } else {
+            $('.errors_add_widget').hide();
+        }
     });
+
+    function validate_add_widget_form() {
+        var error_mass = new Array();
+
+        var site_url = $('#add_widget_form #site_url').val();
+        var img_marker_from_db = $('#add_widget_form #img_marker_from_db').val();
+        var img_map_from_db = $('#add_widget_form #img_map_from_db').val();
+
+        if (site_url == '') {
+            error_mass.push('Заполните поле "Ссылка на сайт"');
+        }
+
+        if ($("#turn_on_priv_transport").prop("checked")) {
+            var html_priv_transport = $('#add_widget_form #html_priv_transport').val();
+
+            if (html_priv_transport == '') {
+                error_mass.push('Введите HTML код для раздела "Добраться на авто"');
+            }
+        }
+
+        if ($("#turn_on_pub_transport").prop("checked")) {
+            var html_pub_transport = $('#add_widget_form #html_pub_transport').val();
+
+            if (html_pub_transport == '') {
+                error_mass.push('Введите HTML код для раздела "Добраться на общественном транспорте"');
+            }
+        }
+
+        if ($("#turn_on_taxi").prop("checked")) {
+            var html_taxi = $('#add_widget_form #html_taxi').val();
+
+            if (html_taxi == '') {
+                error_mass.push('Введите HTML код для раздела "Заказать такси"');
+            }
+        }
+
+        if ($("#turn_on_rent_car").prop("checked")) {
+            var html_rent_car = $('#add_widget_form #html_rent_car').val();
+
+            if (html_rent_car == '') {
+                error_mass.push('Введите HTML код для раздела "Аренда автомобиля"');
+            }
+        }
+
+        if (!$("#default_img").prop("checked") && img_map_from_db == '' && img_marker_from_db == '') {
+            var new_img_marker = $('#add_widget_form #new_img_marker').val();
+            var new_img_map = $('#add_widget_form #new_img_map').val();
+
+            if (new_img_marker == '') {
+                error_mass.push('Выберите картинку маркера для виджета');
+            }
+
+            if (new_img_map == '') {
+                error_mass.push('Выберите картинку карты для виджета');
+            }
+        }
+
+        return error_mass;
+    }
 });
-
-function show_pop_up_captcha() {
-    $('#popup_overlay_captcha').show();
-    $('#pop_up_captcha').show();
-    $("input[name='captcha']", '#form_captcha').val('');
-    $('#incorrect_captcha').hide();
-}
-
-function hide_pop_up_captcha() {
-    $('#popup_overlay_captcha').hide();
-    $('#pop_up_captcha').hide();
-    $("input[name='captcha']", '#form_captcha').val('');
-    $('#incorrect_captcha').hide();
-}

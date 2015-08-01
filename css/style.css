@@ -25,6 +25,11 @@ body {
     display: block;
 }
 
+input[type='file'] {
+    display: block;
+    margin: 5px;
+}
+
 .textarea {
     border: 1px solid #BEBEBE;
     border-radius: 5px;
@@ -309,4 +314,12 @@ button,input,select,textarea {
 .errors_add_widget {
     display: none;
     color: red;
+}
+
+.errors_add_widget span {
+    display: block;
+}
+
+.img_widget_from_db {
+    color: green;
 }
