@@ -96,7 +96,7 @@ class Generate_widget extends CI_Controller {
                     $data_upload_img = $this->upload->data();
 
                     $final_data['new_img_map'] = $data_upload_img['file_name'];
-                } elseif (!isset($data_post['default_img']) && $data_post['img_map_from_db'] != '' && $data_post['img_marker_from_db'] != '') {
+                } elseif (isset($data_post['default_img']) == '' && $data_post['img_map_from_db'] != '' && $data_post['img_marker_from_db'] != '') {
                     $final_data['new_img_marker'] = $data_post['img_marker_from_db'];
                     $final_data['new_img_map'] = $data_post['img_map_from_db'];
                 } else {
@@ -116,7 +116,7 @@ class Generate_widget extends CI_Controller {
                             redirect('/admin/generate_widget/add_widget_success', 'refresh');
                         }
                     } else {
-                        $update_result = $this->generate_widget_model->update_widget($final_data,$id_site);
+                        $update_result = $this->generate_widget_model->update_widget($final_data, $id_site);
 
                         if ($update_result == 'error_update') {
                             $data['errors'][] = 'Произошла ошибка при сохранении виджета';
@@ -138,7 +138,9 @@ class Generate_widget extends CI_Controller {
             $data['data_widget']['img_map_from_db'] = $data['data_widget']['img_map'];
 
             if ($data['data_widget']['img_marker'] == self::DEFAULT_IMG_MARKER && $data['data_widget']['img_map'] == self::DEFAULT_IMG_MAP) {
-                $data['data_widget']['default_img'] = 1;
+                $data['data_widget']['type_img_from_db'] = 'default';
+            } else {
+                $data['data_widget']['type_img_from_db'] = 'new';
             }
         }
 
@@ -149,11 +151,102 @@ class Generate_widget extends CI_Controller {
 
     public function add_widget_success() {
         $data['title'] = 'Виджет добавлен!';
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('admin/generate_widget/add_widget_success');
         $this->load->view('templates/footer');
     }
+
+    public function widgets() {
+        $data['title'] = 'Список виджетов';
+
+        $data['all_widgets'] = $this->generate_widget_model->get_all_widgets();
+
+        $data['other_js'] = array('js/jquery.ba-throttle-debounce.min.js',
+            'js/jquery.stickyheader.js',
+            'js/script.js');
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('admin/generate_widget/widgets', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function delete_widget() {
+        $this->load->helper('file');
+
+        $id = $this->input->post('id');
+
+        $img_window = $this->generate_widget_model->get_img_window_for_widget($id);
+
+        $del_status = $this->generate_widget_model->delete_widget($id);
+
+        if ($del_status == 'del_ok') {
+            if ($img_window['img_marker'] != self::DEFAULT_IMG_MARKER && $img_window['img_map'] != self::DEFAULT_IMG_MAP) {
+                @unlink("uploads/img_attention_window/" . $img_window['img_marker']);
+                @unlink("uploads/img_attention_window/" . $img_window['img_map']);
+            }
+
+            //@unlink("widgets/widget_" . md5($id_widget) . ".js");
+        }
+    }
+
+    public function install_widget($id) {
+        $data = $this->generate_widget_model->get_site_url_code_widget_by_id($id);
+
+        if (empty($data)) {
+            redirect('/p404', 'refresh');
+        }
+
+        $data['id'] = md5($id);
+
+        $data['title'] = 'Установка виджета';
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('admin/generate_widget/install_widget', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function installation_check() {
+
+        $id = $this->input->post('id');
+
+        $data = $this->generate_widget_model->get_site_url_code_widget_by_id($id);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $data['site_url']);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+
+        $curl_data = curl_exec($ch);
+
+        preg_match('/var conversioner_code="' . $data['code_widget'] . '"/si', $curl_data, $result);
+
+        if (!empty($result)) {
+            $this->generate_widget_model->update_field_is_installed($id, 1);
+
+            echo 'installed';
+            exit;
+        } else {
+            $this->generate_widget_model->update_field_is_installed($id, 0);
+
+            echo 'not installed';
+            exit;
+        }
+    }
+
+    public function change_active_widget() {
+        $id = $this->input->post('id');
+        $active_status = $this->input->post('active_status');
+
+        $this->generate_widget_model->update_field_is_active($id, $active_status);
+
+        /*if ($this->generate_widget($id_widget)) {
+            echo "ok";
+            exit;
+        }*/
+    }
+
 }
 
 ?>

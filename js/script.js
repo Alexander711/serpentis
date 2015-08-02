@@ -27,17 +27,41 @@ $(function () {
         $("#default_img").prop('checked', false);
 
         $(".img_widget_from_db").hide();
-
         $("#img_marker_from_db").val('');
         $("#img_map_from_db").val('');
+        $("#type_img_from_db").val('');
     });
 
     $('#default_img').change(function () {
         $(".img_widget_from_db").hide();
-
         $("#img_marker_from_db").val('');
         $("#img_map_from_db").val('');
+        $("#type_img_from_db").val('');
     });
+
+    if ($('#add_widget_form #html_priv_transport').val() != '') {
+        $('#way_priv_transport_form').toggle();
+        $("#turn_on_priv_transport").prop('checked', true);
+    }
+
+    if ($('#add_widget_form #html_pub_transport').val() != '') {
+        $('#way_pub_transport_form').toggle();
+        $("#turn_on_pub_transport").prop('checked', true);
+    }
+
+    if ($('#add_widget_form #html_taxi').val() != '') {
+        $('#taxi_form').toggle();
+        $("#turn_on_taxi").prop('checked', true);
+    }
+
+    if ($('#add_widget_form #html_rent_car').val() != '') {
+        $('#rent_car_form').toggle();
+        $("#turn_on_rent_car").prop('checked', true);
+    }
+
+    if ($('#add_widget_form #img_map_from_db').val() != '' && $('#add_widget_form #img_marker_from_db').val() != '') {
+        $('#new_img_form').toggle();
+    }
 
     $("#add_widget_form").on('submit', function (e) {
         var error_mass = validate_add_widget_form();
@@ -56,62 +80,106 @@ $(function () {
         }
     });
 
-    function validate_add_widget_form() {
-        var error_mass = new Array();
+    $(".delete_widget").click(function () {
+        if (confirm("Вы уверены что хотите удалить?")) {
+            var id = $(this).data('id');
 
-        var site_url = $('#add_widget_form #site_url').val();
-        var img_marker_from_db = $('#add_widget_form #img_marker_from_db').val();
-        var img_map_from_db = $('#add_widget_form #img_map_from_db').val();
-
-        if (site_url == '') {
-            error_mass.push('Заполните поле "Ссылка на сайт"');
+            $.post("/admin/generate_widget/delete_widget", {'id': id}, function (event) {
+                $('#widget_row_' + id).fadeOut(300);
+            });
         }
+    });
 
-        if ($("#turn_on_priv_transport").prop("checked")) {
-            var html_priv_transport = $('#add_widget_form #html_priv_transport').val();
+    $(".installation_check").click(function () {
+        var id = $(this).data('id');
 
-            if (html_priv_transport == '') {
-                error_mass.push('Введите HTML код для раздела "Добраться на авто"');
+        $.post("/admin/generate_widget/installation_check", {'id': id}, function (event) {
+            if (event == 'installed') {
+                $('#installation_check_' + id).html('<img src="/images/icon_ok_green.png" title="Проверить установку виджета(Виджет установлен)">');
+            } else if (event == 'not installed') {
+                $('#installation_check_' + id).html('<img src="/images/gearblue.png" title="Проверить установку виджета(Виджет не установлен)">');
             }
-        }
+        });
+    });
 
-        if ($("#turn_on_pub_transport").prop("checked")) {
-            var html_pub_transport = $('#add_widget_form #html_pub_transport').val();
+    $(".active_status").click(function () {
+        var id = $(this).data('id');
+        var active_status = $(this).data('active_status');
 
-            if (html_pub_transport == '') {
-                error_mass.push('Введите HTML код для раздела "Добраться на общественном транспорте"');
+        $.post("/admin/generate_widget/change_active_widget", {id: id, active_status: active_status}, function (event) {
+            if (event == 'ok' && active_status == 1) {
+                if (!$('#activated_' + id).hasClass('active_status_hide')) {
+                    $('#activated_' + id).addClass('active_status_hide');
+                }
+
+                $('#not_activated_' + id).removeClass('active_status_hide');
+
+            } else if (event == 'ok' && active_status == 0) {
+                if (!$('#not_activated_' + id).hasClass('active_status_hide')) {
+                    $('#not_activated_' + id).addClass('active_status_hide');
+                }
+
+                $('#activated_' + id).removeClass('active_status_hide');
             }
-        }
-
-        if ($("#turn_on_taxi").prop("checked")) {
-            var html_taxi = $('#add_widget_form #html_taxi').val();
-
-            if (html_taxi == '') {
-                error_mass.push('Введите HTML код для раздела "Заказать такси"');
-            }
-        }
-
-        if ($("#turn_on_rent_car").prop("checked")) {
-            var html_rent_car = $('#add_widget_form #html_rent_car').val();
-
-            if (html_rent_car == '') {
-                error_mass.push('Введите HTML код для раздела "Аренда автомобиля"');
-            }
-        }
-
-        if (!$("#default_img").prop("checked") && img_map_from_db == '' && img_marker_from_db == '') {
-            var new_img_marker = $('#add_widget_form #new_img_marker').val();
-            var new_img_map = $('#add_widget_form #new_img_map').val();
-
-            if (new_img_marker == '') {
-                error_mass.push('Выберите картинку маркера для виджета');
-            }
-
-            if (new_img_map == '') {
-                error_mass.push('Выберите картинку карты для виджета');
-            }
-        }
-
-        return error_mass;
-    }
+        });
+    });
 });
+
+function validate_add_widget_form() {
+    var error_mass = new Array();
+
+    var site_url = $('#add_widget_form #site_url').val();
+    var img_marker_from_db = $('#add_widget_form #img_marker_from_db').val();
+    var img_map_from_db = $('#add_widget_form #img_map_from_db').val();
+
+    if (site_url == '') {
+        error_mass.push('Заполните поле "Ссылка на сайт"');
+    }
+
+    if ($("#turn_on_priv_transport").prop("checked")) {
+        var html_priv_transport = $('#add_widget_form #html_priv_transport').val();
+
+        if (html_priv_transport == '') {
+            error_mass.push('Введите HTML код для раздела "Добраться на авто"');
+        }
+    }
+
+    if ($("#turn_on_pub_transport").prop("checked")) {
+        var html_pub_transport = $('#add_widget_form #html_pub_transport').val();
+
+        if (html_pub_transport == '') {
+            error_mass.push('Введите HTML код для раздела "Добраться на общественном транспорте"');
+        }
+    }
+
+    if ($("#turn_on_taxi").prop("checked")) {
+        var html_taxi = $('#add_widget_form #html_taxi').val();
+
+        if (html_taxi == '') {
+            error_mass.push('Введите HTML код для раздела "Заказать такси"');
+        }
+    }
+
+    if ($("#turn_on_rent_car").prop("checked")) {
+        var html_rent_car = $('#add_widget_form #html_rent_car').val();
+
+        if (html_rent_car == '') {
+            error_mass.push('Введите HTML код для раздела "Аренда автомобиля"');
+        }
+    }
+
+    if (!$("#default_img").prop("checked") && img_map_from_db == '' && img_marker_from_db == '') {
+        var new_img_marker = $('#add_widget_form #new_img_marker').val();
+        var new_img_map = $('#add_widget_form #new_img_map').val();
+
+        if (new_img_marker == '') {
+            error_mass.push('Выберите картинку маркера для виджета');
+        }
+
+        if (new_img_map == '') {
+            error_mass.push('Выберите картинку карты для виджета');
+        }
+    }
+
+    return error_mass;
+}

@@ -323,3 +323,7 @@ button,input,select,textarea {
 .img_widget_from_db {
     color: green;
 }
+
+.active_status_hide {
+    display: none;
+}
