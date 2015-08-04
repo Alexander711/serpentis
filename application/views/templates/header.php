@@ -17,24 +17,38 @@
             <?php endforeach; ?>
         <?php endif; ?>
     </head>
-    <body>
+    <body <?php if ($this->uri->segment(3) == 'login') { ?>class="login_page_body"<?php } ?>>
         <div class="container">
-            <header>
-                <div class="title_and_menu">
-                    <h1>«Конверсионер» &mdash; инструмент удержания клиентов.
-                        <span>Установите «конвертик» на ваш веб-сайт и удерживайте до 75% больше клиентов.</span>
-                    </h1>	
-                    <nav class="main_menu">
-                        <?php if ($this->uri->segment(3) == 'sms_history_list') { ?>
-                            <span class="selected_menu">Собранные контакты</span>
-                        <?php } else { ?>
-                            <a href="<?= base_url("generate_widget/sms_history_list"); ?>">Собранные контакты</a>
-                        <?php } ?>
-                        <?php if (($this->uri->segment(3) == 'widgets') or ($this->uri->segment(3) == 'add_widget')) { ?>
-                            <span class="selected_menu">Мои «конвертики»</span>
-                        <?php } else { ?>
-                            <a href="<?= base_url("generate_widget/widgets"); ?>">Мои «конвертики»</a>
-                        <?php } ?>
-                    </nav>
-                </div>
-            </header>
+            <?php if ($this->uri->segment(3) != 'login') { ?>
+                <header>
+                    <?php if ($this->session->userdata('id_user')) { ?>
+                        <div class="account_info_body">
+                            <div class="account_info">
+                                Здравствуйте, 
+                                <a href="<?= base_url("admin/authorization/edit_user_data"); ?>" id='edit_user_data'>
+                                    <span id="user_name_aut"><?php echo $this->session->userdata('name') . ' ' . $this->session->userdata('last_name') . '!'; ?></span>
+                                </a>
+                                <span id="user_email_aut"><?php echo '(' . $this->session->userdata('email') . ')' ?></span>
+                                <a href="<?= base_url("admin/authorization/logout"); ?>">Выйти</a>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div class="title_and_menu">
+                        <h1>«Конверсионер» &mdash; инструмент удержания клиентов.
+                            <span>Установите «конвертик» на ваш веб-сайт и удерживайте до 75% больше клиентов.</span>
+                        </h1>	
+                        <nav class="main_menu">
+                            <?php if ($this->uri->segment(3) == 'sms_history_list') { ?>
+                                <span class="selected_menu">Собранные контакты</span>
+                            <?php } else { ?>
+                                <a href="<?= base_url("/admin/generate_widget/sms_history_list"); ?>">Собранные контакты</a>
+                            <?php } ?>
+                            <?php if (($this->uri->segment(3) == 'widgets') or ( $this->uri->segment(3) == 'add_widget')) { ?>
+                                <span class="selected_menu">Мои «конвертики»</span>
+                            <?php } else { ?>
+                                <a href="<?= base_url("/admin/generate_widget/widgets"); ?>">Мои «конвертики»</a>
+                            <?php } ?>
+                        </nav>
+                    </div>
+                </header>
+            <?php } ?>

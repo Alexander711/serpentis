@@ -123,6 +123,32 @@ $(function () {
             }
         });
     });
+
+    $("#login_form").submit(function (e) {
+        e.preventDefault();
+
+        var error_mass = validate_login_form();
+        var error_mess = '';
+
+        if (error_mass.length == 0) {
+            $('.errors_login_form').hide();
+
+            $.post("/admin/authorization/login", $('#login_form').serialize(), function (event) {
+                if (event == 'ok') {
+                    window.location.replace("/admin/generate_widget/widgets");
+                } else {
+                    $('.errors_login_form').html(event);
+                    $('.errors_login_form').show().delay(5000).fadeOut(1000);
+                }
+            });
+        } else {
+            for (i = 0; i < error_mass.length; i++) {
+                error_mess = error_mess + '<span>' + error_mass[i] + '</span><br/>';
+                $('.errors_login_form').html(error_mess);
+                $('.errors_login_form').show().delay(5000).fadeOut(1000);
+            }
+        }
+    });
 });
 
 function validate_add_widget_form() {
@@ -179,6 +205,24 @@ function validate_add_widget_form() {
         if (new_img_map == '') {
             error_mass.push('Выберите картинку карты для виджета');
         }
+    }
+
+    return error_mass;
+}
+
+function validate_login_form() {
+    var error_mass = new Array();
+
+    if ($('#login_form #email_user_login_form').val() == '') {
+        error_mass[error_mass.length] = 'Заполните поле "Email"';
+    }
+
+    if ($('#login_form #pass_login_form').val() == '') {
+        error_mass[error_mass.length] = 'Заполните поле "Пароль"';
+    }
+
+    if ($("#login_form #pass_login_form").val().length < 6 && $('#login_form #pass_login_form').val() != '') {
+        error_mass[error_mass.length] = 'Длина не меньше 6 символов';
     }
 
     return error_mass;

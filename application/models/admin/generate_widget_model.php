@@ -79,44 +79,72 @@ class Generate_widget_model extends CI_Model {
         $this->db->where('id', (int) $id_site);
         $this->db->update('site', $array1);
 
-        if ($data['html_priv_transport'] != '') {
-            $array2 = array('html_priv_transport' => htmlspecialchars($data['html_priv_transport']));
-
+        if ($data['html_priv_transport'] != '' && isset($data['turn_on_priv_transport'])) {
             if ($data['id_priv_transport'] != '') {
+                $array2 = array('html_priv_transport' => htmlspecialchars($data['html_priv_transport']));
+
                 $this->db->update('priv_transport', $array2, array('id_site' => (int) $id_site));
             } else {
+                $array2 = array(
+                    'id_site' => (int) $id_site,
+                    'html_priv_transport' => htmlspecialchars($data['html_priv_transport'])
+                );
+
                 $this->db->insert('priv_transport', $array2);
             }
+        } elseif (!isset($data['turn_on_priv_transport']) && $data['id_priv_transport'] != '') {echo 1;exit;
+            $this->db->delete('priv_transport', array('id' => (int)$data['id_priv_transport']));
         }
 
-        if ($data ['html_pub_transport'] != '') {
-            $array3 = array('html_pub_transport' => htmlspecialchars($data['html_pub_transport']));
-
+        if ($data ['html_pub_transport'] != '' && isset($data['turn_on_pub_transport'])) {
             if ($data['id_pub_transport'] != '') {
+                $array3 = array('html_pub_transport' => htmlspecialchars($data['html_pub_transport']));
+
                 $this->db->update('pub_transport', $array3, array('id_site' => (int) $id_site));
             } else {
+                $array3 = array(
+                    'id_site' => (int) $id_site,
+                    'html_pub_transport' => htmlspecialchars($data['html_pub_transport'])
+                );
+
                 $this->db->insert('pub_transport', $array3);
             }
+        } elseif (!isset($data['turn_on_pub_transport']) && $data['id_pub_transport'] != '') {
+            $this->db->delete('pub_transport', array('id' => (int)$data['id_pub_transport']));
         }
 
-        if ($data['html_taxi'] != '') {
-            $array4 = array('html_taxi' => htmlspecialchars($data['html_taxi']));
-
+        if ($data['html_taxi'] != '' && isset($data['turn_on_taxi'])) {
             if ($data['id_taxi'] != '') {
+                $array4 = array('html_taxi' => htmlspecialchars($data['html_taxi']));
+
                 $this->db->update('taxi', $array4, array('id_site' => (int) $id_site));
             } else {
+                $array4 = array(
+                    'id_site' => (int) $id_site,
+                    'html_taxi' => htmlspecialchars($data['html_taxi'])
+                );
+
                 $this->db->insert('taxi', $array4);
             }
+        } elseif (!isset($data['turn_on_taxi']) && $data['id_taxi'] != '') {
+            $this->db->delete('taxi', array('id' => (int)$data['id_taxi']));
         }
 
-        if ($data['html_rent_car'] != '') {
-            $array5 = array('html_rent_car' => htmlspecialchars($data['html_rent_car']));
-
+        if ($data['html_rent_car'] != '' && isset($data['turn_on_rent_car'])) {
             if ($data['id_rent_car'] != '') {
+                $array5 = array('html_rent_car' => htmlspecialchars($data['html_rent_car']));
+
                 $this->db->update('rent_car', $array5, array('id_site' => (int) $id_site));
             } else {
+                $array5 = array(
+                    'id_site' => (int) $id_site,
+                    'html_rent_car' => htmlspecialchars($data['html_rent_car'])
+                );
+
                 $this->db->insert('rent_car', $array5);
             }
+        } elseif (!isset($data['turn_on_rent_car']) && $data['id_rent_car'] != '') {
+            $this->db->delete('rent_car', array('id' => (int)$data['id_rent_car']));
         }
 
         if ($this->db->trans_status() === FALSE) {
@@ -132,8 +160,8 @@ class Generate_widget_model extends CI_Model {
 
     public function check_exist_site($site_name, $id_site = 0) {
         $query = $this->db->query("SELECT *
-                FROM site
-                WHERE site_url = '" . mysql_real_escape_string($site_name) . "'");
+                                   FROM site
+                                   WHERE site_url = '" . mysql_real_escape_string($site_name) . "'");
 
         if (!$query) {
             return false;
@@ -231,8 +259,20 @@ class Generate_widget_model extends CI_Model {
     }
 
     public function get_all_widgets() {
-        $query = $this->db->query("SELECT *
-                                   FROM site");
+        $query = $this->db->query("SELECT site.id,
+                                          site.site_url,
+                                          site.is_installed,
+                                          site.is_active,
+                                          priv_transport.html_priv_transport,
+                                          pub_transport.html_pub_transport,
+                                          taxi.html_taxi,
+                                          rent_car.html_rent_car
+                                   FROM `site` 
+                                   LEFT JOIN priv_transport ON site.id = priv_transport.id_site
+                                   LEFT JOIN pub_transport ON site.id = pub_transport.id_site
+                                   LEFT JOIN taxi ON site.id = taxi.id_site
+                                   LEFT JOIN rent_car ON site.id = rent_car.id_site
+                                   GROUP BY site.id");
 
         if (!$query) {
             return false;

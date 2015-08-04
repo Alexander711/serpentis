@@ -13,10 +13,16 @@ class Generate_widget extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('admin/generate_widget_model');
+        $this->load->model('admin/authorization_model');
+        $this->load->library('session');
         $this->load->helper('work_helper');
     }
 
     public function add_widget($id_site = 0) {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/authorization/login', 'refresh');
+        }
+
         if ($id_site == 0) {
             $data['title'] = 'Создать новый виджет';
         } else {
@@ -150,6 +156,10 @@ class Generate_widget extends CI_Controller {
     }
 
     public function add_widget_success() {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/authorization/login', 'refresh');
+        }
+
         $data['title'] = 'Виджет добавлен!';
 
         $this->load->view('templates/header', $data);
@@ -158,6 +168,10 @@ class Generate_widget extends CI_Controller {
     }
 
     public function widgets() {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/authorization/login', 'refresh');
+        }
+
         $data['title'] = 'Список виджетов';
 
         $data['all_widgets'] = $this->generate_widget_model->get_all_widgets();
@@ -172,6 +186,10 @@ class Generate_widget extends CI_Controller {
     }
 
     public function delete_widget() {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/p404', 'refresh');
+        }
+        
         $this->load->helper('file');
 
         $id = $this->input->post('id');
@@ -191,6 +209,10 @@ class Generate_widget extends CI_Controller {
     }
 
     public function install_widget($id) {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/p404', 'refresh');
+        }
+        
         $data = $this->generate_widget_model->get_site_url_code_widget_by_id($id);
 
         if (empty($data)) {
@@ -207,6 +229,9 @@ class Generate_widget extends CI_Controller {
     }
 
     public function installation_check() {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/p404', 'refresh');
+        }
 
         $id = $this->input->post('id');
 
@@ -236,6 +261,10 @@ class Generate_widget extends CI_Controller {
     }
 
     public function change_active_widget() {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/p404', 'refresh');
+        }
+        
         $id = $this->input->post('id');
         $active_status = $this->input->post('active_status');
 

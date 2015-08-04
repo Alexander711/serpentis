@@ -6,6 +6,7 @@
             <thead>
                 <tr>
                     <th>Веб-сайт</th>
+                    <th>Разделы</th>
                     <th>Состояние</th>
                     <th></th>
                 </tr>
@@ -15,6 +16,27 @@
                     <?php foreach ($all_widgets as $row): ?>
                         <tr id="widget_row_<?= $row['id'] ?>">
                             <td><?= $row['site_url']; ?></td>
+                            <td>
+                                <?php if($row['html_priv_transport'] != '') { ?>
+                                    <span>Добраться на авто;</span>
+                                <?php } ?>
+                                    
+                                <?php if($row['html_pub_transport'] != '') { ?>
+                                    <span>Добраться на обществ. транспорте;</span>
+                                <?php } ?>
+                                    
+                                <?php if($row['html_taxi'] != '') { ?>
+                                    <span>Заказать такси;</span>
+                                <?php } ?>
+                                    
+                                <?php if($row['html_rent_car'] != '') {?>
+                                    <span>Аренда авто;</span>
+                                <?php } ?>
+
+                                <?php if($row['html_priv_transport'] == '' && $row['html_pub_transport'] == '' && $row['html_taxi'] == '' && $row['html_rent_car'] == ''){ ?>
+                                    <span>Нет ни одного раздела!</span>
+                                <?php } ?>
+                            </td>
                             <td>
                                 <a href="javascript:void(0);" id="not_activated_<?= $row['id'] ?>" class='active_status <?php if ($row['is_active'] == 0) { ?> active_status_hide <?php } ?>' data-active_status='0' data-id="<?= $row['id'] ?>">
                                     Отключить
