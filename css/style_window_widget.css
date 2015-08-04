@@ -1,0 +1,55 @@
+.serpentis_widget_window_body{
+    margin: 0;
+}
+
+#serpentis_widget_window {
+    font-size: 17px;
+    text-align: center;
+    font-family: "Tinos",serif;
+    font-weight: 400;
+}
+
+.serpentis_title_window {
+    height: 60px;
+    padding: 25px 20px;
+    vertical-align: middle;
+    width: 487px;
+}
+
+.serpentis_title_window h2 {
+    font-weight: 400;
+    margin: 0;
+}
+.serpentis_content_window {
+    padding: 5px 20px 5px 20px;
+    height: 274px;
+    width: 487px;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.serpentis_menu_window {
+    vertical-align: middle;
+    margin: 0;
+    padding: 5px 20px 5px 20px;
+    width: 487px;
+    height: 35px;
+}
+
+.serpentis_menu_window a {
+    margin: 0 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.hide_titel_section {
+    display: none;
+}
+
+.hide_section {
+    display: none;
+}
+
+.hide_menu_section {
+    display: none;
+}

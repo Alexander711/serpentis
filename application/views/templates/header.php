@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <title><?php echo $title ?></title>
+        <link href="<?= base_url("favicon.ico"); ?>" rel="shortcut icon">
         <link rel="stylesheet" type="text/css" href="<?= base_url("css/style.css"); ?>">
         <link href='http://fonts.googleapis.com/css?family=Tinos&subset=latin,cyrillic,cyrillic-ext' rel='stylesheet' type='text/css'>
         <?php if (isset($other_css)): ?>

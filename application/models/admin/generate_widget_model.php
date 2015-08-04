@@ -92,8 +92,10 @@ class Generate_widget_model extends CI_Model {
 
                 $this->db->insert('priv_transport', $array2);
             }
-        } elseif (!isset($data['turn_on_priv_transport']) && $data['id_priv_transport'] != '') {echo 1;exit;
-            $this->db->delete('priv_transport', array('id' => (int)$data['id_priv_transport']));
+        } elseif (!isset($data['turn_on_priv_transport']) && $data['id_priv_transport'] != '') {
+            echo 1;
+            exit;
+            $this->db->delete('priv_transport', array('id' => (int) $data['id_priv_transport']));
         }
 
         if ($data ['html_pub_transport'] != '' && isset($data['turn_on_pub_transport'])) {
@@ -110,7 +112,7 @@ class Generate_widget_model extends CI_Model {
                 $this->db->insert('pub_transport', $array3);
             }
         } elseif (!isset($data['turn_on_pub_transport']) && $data['id_pub_transport'] != '') {
-            $this->db->delete('pub_transport', array('id' => (int)$data['id_pub_transport']));
+            $this->db->delete('pub_transport', array('id' => (int) $data['id_pub_transport']));
         }
 
         if ($data['html_taxi'] != '' && isset($data['turn_on_taxi'])) {
@@ -127,7 +129,7 @@ class Generate_widget_model extends CI_Model {
                 $this->db->insert('taxi', $array4);
             }
         } elseif (!isset($data['turn_on_taxi']) && $data['id_taxi'] != '') {
-            $this->db->delete('taxi', array('id' => (int)$data['id_taxi']));
+            $this->db->delete('taxi', array('id' => (int) $data['id_taxi']));
         }
 
         if ($data['html_rent_car'] != '' && isset($data['turn_on_rent_car'])) {
@@ -144,7 +146,7 @@ class Generate_widget_model extends CI_Model {
                 $this->db->insert('rent_car', $array5);
             }
         } elseif (!isset($data['turn_on_rent_car']) && $data['id_rent_car'] != '') {
-            $this->db->delete('rent_car', array('id' => (int)$data['id_rent_car']));
+            $this->db->delete('rent_car', array('id' => (int) $data['id_rent_car']));
         }
 
         if ($this->db->trans_status() === FALSE) {
@@ -348,6 +350,80 @@ class Generate_widget_model extends CI_Model {
         } else {
             return TRUE;
         }
+    }
+
+    public function get_data_widget_by_code($code) {
+        $query = $this->db->query("SELECT id AS id_site,
+                                          site_url
+                                   FROM site
+                                   WHERE code_widget = '" . mysql_real_escape_string($code) . "'");
+
+        if (!$query) {
+            return false;
+        }
+
+        $result = $query->row_array();
+
+        $id_site = $result['id_site'];
+        
+        $query = $this->db->query("SELECT html_priv_transport
+                                   FROM priv_transport
+                                   WHERE id_site = '" . (int) $id_site . "'");
+
+        if (!$query) {
+            return false;
+        }
+
+        if (!empty($query->row_array())) {
+
+            $data = $query->row_array();
+
+            $result['html_priv_transport'] = htmlspecialchars_decode($data['html_priv_transport']);
+        }
+
+        $query = $this->db->query("SELECT html_pub_transport
+                                   FROM pub_transport
+                                   WHERE id_site = '" . (int) $id_site . "'");
+
+        if (!$query) {
+            return false;
+        }
+
+        if (!empty($query->row_array())) {
+            $data = $query->row_array();
+
+            $result['html_pub_transport'] = htmlspecialchars_decode($data['html_pub_transport']);
+        }
+
+        $query = $this->db->query("SELECT html_taxi
+                                   FROM taxi
+                                   WHERE id_site = '" . (int) $id_site . "'");
+
+        if (!$query) {
+            return false;
+        }
+
+        if (!empty($query->row_array())) {
+            $data = $query->row_array();
+            
+            $result['html_taxi'] = htmlspecialchars_decode($data['html_taxi']);
+        }
+
+        $query = $this->db->query("SELECT html_rent_car
+                                   FROM rent_car
+                                   WHERE id_site = '" . (int) $id_site . "'");
+
+        if (!$query) {
+            return false;
+        }
+
+        if (!empty($query->row_array())) {
+            $data = $query->row_array();
+
+            $result['html_rent_car'] = htmlspecialchars_decode($data['html_rent_car']);
+        }
+
+        return $result;
     }
 
 }
