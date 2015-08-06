@@ -354,7 +354,8 @@ class Generate_widget_model extends CI_Model {
 
     public function get_data_widget_by_code($code) {
         $query = $this->db->query("SELECT id AS id_site,
-                                          site_url
+                                          site_url,
+                                          code_widget
                                    FROM site
                                    WHERE code_widget = '" . mysql_real_escape_string($code) . "'");
 
@@ -365,7 +366,7 @@ class Generate_widget_model extends CI_Model {
         $result = $query->row_array();
 
         $id_site = $result['id_site'];
-        
+
         $query = $this->db->query("SELECT html_priv_transport
                                    FROM priv_transport
                                    WHERE id_site = '" . (int) $id_site . "'");
@@ -405,7 +406,7 @@ class Generate_widget_model extends CI_Model {
 
         if (!empty($query->row_array())) {
             $data = $query->row_array();
-            
+
             $result['html_taxi'] = htmlspecialchars_decode($data['html_taxi']);
         }
 
@@ -424,6 +425,26 @@ class Generate_widget_model extends CI_Model {
         }
 
         return $result;
+    }
+
+    public function get_site_url_data_user_by_code($code) {
+        $query = $this->db->query("SELECT site.site_url,
+                                          users.phone,
+                                          users.email,
+                                          users.id AS id_user
+                                   FROM site
+                                   JOIN users ON site.id_user = users.id
+                                   WHERE site.code_widget = '" . mysql_real_escape_string($code) . "'");
+
+        if (!$query) {
+            return false;
+        }
+
+        return $query->row_array();
+    }
+
+    public function save_sms_history($data_sms_history) {
+        $this->db->insert('sms_history', $data_sms_history);
     }
 
 }

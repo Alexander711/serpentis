@@ -64,23 +64,50 @@
                 <?php } ?>
             </div>
             <?php if (isset($html_priv_transport)) { ?>
-                <div class="serpentis_content_window" id="content_priv_transport">
-                    <?= $html_priv_transport ?>
+                <div class="serpentis_content_priv_transport" id="content_priv_transport">
+                    <!--<?= $html_priv_transport ?>-->
                 </div>
             <?php } ?>
             <?php if (isset($html_pub_transport)) { ?>
-                <div class="serpentis_content_window <?php if ($who_first != 'pub_transport') { ?>hide_section<?php } ?>" id="content_pub_transport">
+                <div class="serpentis_content_pub_transport <?php if ($who_first != 'pub_transport') { ?>hide_content_section<?php } ?>" id="content_pub_transport">
                     <?= $html_pub_transport ?>
                 </div>
             <?php } ?>
             <?php if (isset($html_taxi)) { ?>
-                <div class="serpentis_content_window <?php if ($who_first != 'taxi') { ?>hide_section<?php } ?>" id="content_taxi">
+                <div class="serpentis_content_taxi <?php if ($who_first != 'taxi') { ?>hide_content_section<?php } ?>" id="content_taxi">
                     <?= $html_taxi ?>
                 </div>
             <?php } ?>
             <?php if (isset($html_rent_car)) { ?>
-                <div class="serpentis_content_window <?php if ($who_first != 'rent_car') { ?>hide_section<?php } ?>" id="content_rent_car">
+                <div class="serpentis_content_rent_car <?php if ($who_first != 'rent_car') { ?>hide_content_section<?php } ?>" id="content_rent_car">
                     <?= $html_rent_car ?>
+                </div>
+            <?php } ?>
+            <?php if (isset($html_taxi)) { ?>
+                <div class="serpentis_taxi_form <?php if ($who_first != 'taxi') { ?>hide_form_taxi<?php } ?>">
+                    <form id="serpentis_taxi_form" name="serpentis_taxi_form" method="post" autocomplete="off">
+                        <input type="text" id="serpentis_number_phone_taxi" placeholder="Введите номер своего телефона" name="serpentis_number_phone_taxi">
+                        <input type="hidden" name="serpentis_code" value="<?= $code_widget ?>">
+                        <input type="hidden" name="email" value="">
+                        <input type="hidden" name="phone" value="">
+                        <button class="serpentis_send_phone">
+                            Заказать такси
+                        </button>
+                    </form>
+                </div>
+            <?php } ?>
+
+            <?php if (isset($html_rent_car)) { ?>
+                <div class="serpentis_rent_car_form <?php if ($who_first != 'rent_car') { ?>hide_form_rent_car<?php } ?>">
+                    <form id="serpentis_rent_car_form" name="serpentis_rent_car_form" method="post" autocomplete="off">
+                        <input type="text" id="serpentis_number_phone_rent_car" placeholder="Введите номер своего телефона" name="serpentis_number_phone_rent_car">
+                        <input type="hidden" name="serpentis_code" value="<?= $code_widget ?>">
+                        <input type="hidden" name="email" value="">
+                        <input type="hidden" name="phone" value="">
+                        <button class="serpentis_send_phone">
+                            Арендовать авто
+                        </button>
+                    </form>
                 </div>
             <?php } ?>
         </div>
@@ -92,7 +119,7 @@
                     $('#title_pub_transport').hide();
                     $('#title_taxi').hide();
                     $('#title_rent_car').hide();
-                    
+
                     $('#gelb_img_priv_transport').show();
                     $('#white_img_priv_transport').hide();
                     $('#gelb_img_pub_transport').hide();
@@ -101,19 +128,22 @@
                     $('#white_img_taxi').show();
                     $('#gelb_img_rent_car').hide();
                     $('#white_img_rent_car').show();
-                    
+
                     $('#content_priv_transport').show();
                     $('#content_pub_transport').hide();
                     $('#content_taxi').hide();
                     $('#content_rent_car').hide();
+                    
+                    $('.serpentis_taxi_form').hide();
+                    $('.serpentis_rent_car_form').hide();
                 });
-                
+
                 $('#menu_pub_transport').click(function () {
                     $('#title_priv_transport').hide();
                     $('#title_pub_transport').show();
                     $('#title_taxi').hide();
                     $('#title_rent_car').hide();
-                    
+
                     $('#gelb_img_priv_transport').hide();
                     $('#white_img_priv_transport').show();
                     $('#gelb_img_pub_transport').show();
@@ -122,19 +152,22 @@
                     $('#white_img_taxi').show();
                     $('#gelb_img_rent_car').hide();
                     $('#white_img_rent_car').show();
-                    
+
                     $('#content_priv_transport').hide();
                     $('#content_pub_transport').show();
                     $('#content_taxi').hide();
                     $('#content_rent_car').hide();
+                    
+                    $('.serpentis_taxi_form').hide();
+                    $('.serpentis_rent_car_form').hide();
                 });
-                
+
                 $('#menu_taxi').click(function () {
                     $('#title_priv_transport').hide();
                     $('#title_pub_transport').hide();
                     $('#title_taxi').show();
                     $('#title_rent_car').hide();
-                    
+
                     $('#gelb_img_priv_transport').hide();
                     $('#white_img_priv_transport').show();
                     $('#gelb_img_pub_transport').hide();
@@ -143,19 +176,22 @@
                     $('#white_img_taxi').hide();
                     $('#gelb_img_rent_car').hide();
                     $('#white_img_rent_car').show();
-                    
+
                     $('#content_priv_transport').hide();
                     $('#content_pub_transport').hide();
                     $('#content_taxi').show();
                     $('#content_rent_car').hide();
+                    
+                    $('.serpentis_taxi_form').show();
+                    $('.serpentis_rent_car_form').hide();
                 });
-                
+
                 $('#menu_rent_car').click(function () {
                     $('#title_priv_transport').hide();
                     $('#title_pub_transport').hide();
                     $('#title_taxi').hide();
                     $('#title_rent_car').show();
-                    
+
                     $('#gelb_img_priv_transport').hide();
                     $('#white_img_priv_transport').show();
                     $('#gelb_img_pub_transport').hide();
@@ -164,11 +200,14 @@
                     $('#white_img_taxi').show();
                     $('#gelb_img_rent_car').show();
                     $('#white_img_rent_car').hide();
-                    
+
                     $('#content_priv_transport').hide();
                     $('#content_pub_transport').hide();
                     $('#content_taxi').hide();
                     $('#content_rent_car').show();
+                    
+                    $('.serpentis_taxi_form').hide();
+                    $('.serpentis_rent_car_form').show();
                 });
             });
         </script>
