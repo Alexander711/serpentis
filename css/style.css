@@ -11,12 +11,22 @@ body {
     margin: 0;
 }
 
-.field_form {
+.field_form,
+.input_sms_history_search,
+.select_sms_history_search {
     border: 1px solid #BEBEBE;
     border-radius: 5px;
     color: #646464;
     font-size: 14px;
     padding: 0 7px 0 15px;
+}
+
+.input_sms_history_search {
+    height: 28px;
+}
+
+.select_sms_history_search {
+    height: 30px;
 }
 
 .field_form {

@@ -8,8 +8,8 @@
     </div>
 
     <?php
-    if (isset($data_widget['id_site'])) {
-        $action_url = base_url('/admin/generate_widget/add_widget/' . $data_widget['id_site']);
+    if (isset($data_widget['id_widget'])) {
+        $action_url = base_url('/admin/generate_widget/add_widget/' . $data_widget['id_widget']);
     } else {
         $action_url = base_url('/admin/generate_widget/add_widget');
     }

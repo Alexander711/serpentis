@@ -221,57 +221,62 @@
     font-weight: 400;
 }
 
+#serpentis_map {
+    height: 150px;
+    width: 150px;
+}
+
 /* Marker Bounce */
 
 #serpentis_marker {
-  position: absolute;
-  height: 100px;
-  width: 100px;
-  left: 25px;
-  -webkit-animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
-  animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
-  -moz-animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
-  -o-animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    left: 25px;
+    -webkit-animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
+    animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
+    -moz-animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
+    -o-animation: bounce .8s cubic-bezier(0.30, 2.40, 0.85, 2.50) infinite;
 }
 
 #serpentis_attention_window {
-  position: absolute;
-  bottom: 5px;
-  cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    cursor: pointer;
 }
 
 @-webkit-keyframes bounce {
-  from, to {
-    bottom: 40px;
-  }
-  75% {
-    bottom: 55px;
-  }
+    from, to {
+        bottom: 40px;
+    }
+    75% {
+        bottom: 55px;
+    }
 }
 
 @keyframes bounce {
-  from, to {
-    bottom: 40px;
-  }
-  75% {
-    bottom: 55px;
-  }
+    from, to {
+        bottom: 40px;
+    }
+    75% {
+        bottom: 55px;
+    }
 }
 
 @-moz-keyframes bounce {
-  from, to {
-    bottom: 40px;
-  }
-  75% {
-    bottom: 55px;
-  }
+    from, to {
+        bottom: 40px;
+    }
+    75% {
+        bottom: 55px;
+    }
 }
 
 @-o-keyframes bounce {
-  from, to {
-    bottom: 40px;
-  }
-  75% {
-    bottom: 55px;
-  }
+    from, to {
+        bottom: 40px;
+    }
+    75% {
+        bottom: 55px;
+    }
 }

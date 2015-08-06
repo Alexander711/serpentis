@@ -1,5 +1,5 @@
 <div class="component">
-    <h2>+ <a href="<?= base_url('/admin/generate_widget/add_widget') ?>">Добавить "Конвертик"</a></h2>
+    <h2>+ <a href="<?= base_url('/admin/generate_widget/add_widget') ?>">Добавить виджет</a></h2>
     <div class="table_body">
         <div class="add_widget_success"></div>
         <table>
@@ -17,23 +17,23 @@
                         <tr id="widget_row_<?= $row['id'] ?>">
                             <td><?= $row['site_url']; ?></td>
                             <td>
-                                <?php if($row['html_priv_transport'] != '') { ?>
+                                <?php if ($row['html_priv_transport'] != '') { ?>
                                     <span>Добраться на авто;</span>
                                 <?php } ?>
-                                    
-                                <?php if($row['html_pub_transport'] != '') { ?>
+
+                                <?php if ($row['html_pub_transport'] != '') { ?>
                                     <span>Добраться на обществ. транспорте;</span>
                                 <?php } ?>
-                                    
-                                <?php if($row['html_taxi'] != '') { ?>
+
+                                <?php if ($row['html_taxi'] != '') { ?>
                                     <span>Заказать такси;</span>
                                 <?php } ?>
-                                    
-                                <?php if($row['html_rent_car'] != '') {?>
+
+                                <?php if ($row['html_rent_car'] != '') { ?>
                                     <span>Аренда авто;</span>
                                 <?php } ?>
 
-                                <?php if($row['html_priv_transport'] == '' && $row['html_pub_transport'] == '' && $row['html_taxi'] == '' && $row['html_rent_car'] == ''){ ?>
+                                <?php if ($row['html_priv_transport'] == '' && $row['html_pub_transport'] == '' && $row['html_taxi'] == '' && $row['html_rent_car'] == '') { ?>
                                     <span>Нет ни одного раздела!</span>
                                 <?php } ?>
                             </td>
@@ -53,10 +53,12 @@
                                         <img src="<?= base_url('images/gearblue.png'); ?>" title='Проверить установку виджета(Виджет не установлен)'>
                                     <?php } ?>
                                 </a>
-                                <a href="<?= base_url('/admin/generate_widget/install_widget/'.$row['id']); ?>">
-                                    <img src="<?= base_url('images/install_widget.png'); ?>" title="Редактировать">
-                                </a>
-                                <a href="<?= base_url('/admin/generate_widget/add_widget/'.$row['id']); ?>">
+                                <?php if ($row['html_priv_transport'] != '' || $row['html_pub_transport'] != '' || $row['html_taxi'] != '' || $row['html_rent_car'] != '') { ?>
+                                    <a href="<?= base_url('/admin/generate_widget/install_widget/' . $row['id']); ?>">
+                                        <img src="<?= base_url('images/install_widget.png'); ?>" title="Установить">
+                                    </a>
+                                <?php } ?>                                
+                                <a href="<?= base_url('/admin/generate_widget/add_widget/' . $row['id']); ?>">
                                     <img src="<?= base_url('images/edit.png'); ?>" title="Редактировать">
                                 </a>
                                 <a class="delete_widget" data-id="<?= $row['id'] ?>" href="javascript:void(0);">

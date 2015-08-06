@@ -18,12 +18,12 @@ class Generate_widget extends CI_Controller {
         $this->load->helper('work_helper');
     }
 
-    public function add_widget($id_site = 0) {
+    public function add_widget($id_widget = 0) {
         if (!$this->authorization_model->check_auth()) {
-            redirect('/authorization/login', 'refresh');
+            redirect('/admin/authorization/login', 'refresh');
         }
 
-        if ($id_site == 0) {
+        if ($id_widget == 0) {
             $data['title'] = 'Создать новый виджет';
         } else {
             $data['title'] = 'Редактирование виджета';
@@ -70,7 +70,7 @@ class Generate_widget extends CI_Controller {
                 }
             }
 
-            $check_exist_site = $this->generate_widget_model->check_exist_site($this->input->post('site_url'), $id_site);
+            $check_exist_site = $this->generate_widget_model->check_exist_site($this->input->post('site_url'), $id_widget);
 
             if ($check_exist_site) {
                 $data['errors'][] = 'Виджет для данного сайта уже существует';
@@ -112,23 +112,35 @@ class Generate_widget extends CI_Controller {
 
                 if (isset($final_data['new_img_marker']) && isset($final_data['new_img_map'])) {
 
-                    if ($id_site == 0) {
-                        $insert_result = $this->generate_widget_model->save_new_widget($final_data);
+                    $id_user = $this->session->userdata('id_user');
+
+                    if ($id_widget == 0) {
+                        $insert_result = $this->generate_widget_model->save_new_widget($final_data, $id_user);
 
                         if ($insert_result == 'error_insert') {
                             $data['errors'][] = 'Произошла ошибка при сохранении виджета';
                             $data['data_widget'] = $data_post;
                         } else {
-                            redirect('/admin/generate_widget/add_widget_success', 'refresh');
+                            if (!$this->generate_widget($insert_result)) {
+                                $data['errors'][] = 'Произошла ошибка при сохранении виджета';
+                                $data['data_widget'] = $data_post;
+                            } else {
+                                redirect('/admin/generate_widget/add_widget_success', 'refresh');
+                            }
                         }
                     } else {
-                        $update_result = $this->generate_widget_model->update_widget($final_data, $id_site);
+                        $update_result = $this->generate_widget_model->update_widget($final_data, $id_widget, $id_user);
 
                         if ($update_result == 'error_update') {
                             $data['errors'][] = 'Произошла ошибка при сохранении виджета';
                             $data['data_widget'] = $data_post;
                         } else {
-                            redirect('/admin/generate_widget/add_widget_success', 'refresh');
+                            if (!$this->generate_widget($id_widget)) {
+                                $data['errors'][] = 'Произошла ошибка при сохранении виджета';
+                                $data['data_widget'] = $data_post;
+                            } else {
+                                redirect('/admin/generate_widget/add_widget_success', 'refresh');
+                            }
                         }
                     }
                 } else {
@@ -136,9 +148,9 @@ class Generate_widget extends CI_Controller {
                     $data['data_widget'] = $data_post;
                 }
             }
-        } elseif ($id_site != 0) {
-            $data['data_widget']['id_site'] = $id_site;
-            $data['data_widget'] = $this->generate_widget_model->get_data_widget($id_site);
+        } elseif ($id_widget != 0) {
+            $data['data_widget']['id_widget'] = $id_widget;
+            $data['data_widget'] = $this->generate_widget_model->get_data_widget($id_widget);
 
             $data['data_widget']['img_marker_from_db'] = $data['data_widget']['img_marker'];
             $data['data_widget']['img_map_from_db'] = $data['data_widget']['img_map'];
@@ -157,7 +169,7 @@ class Generate_widget extends CI_Controller {
 
     public function add_widget_success() {
         if (!$this->authorization_model->check_auth()) {
-            redirect('/authorization/login', 'refresh');
+            redirect('/admin/authorization/login', 'refresh');
         }
 
         $data['title'] = 'Виджет добавлен!';
@@ -169,7 +181,7 @@ class Generate_widget extends CI_Controller {
 
     public function widgets() {
         if (!$this->authorization_model->check_auth()) {
-            redirect('/authorization/login', 'refresh');
+            redirect('/admin/authorization/login', 'refresh');
         }
 
         $data['title'] = 'Список виджетов';
@@ -189,7 +201,7 @@ class Generate_widget extends CI_Controller {
         if (!$this->authorization_model->check_auth()) {
             redirect('/p404', 'refresh');
         }
-        
+
         $this->load->helper('file');
 
         $id = $this->input->post('id');
@@ -204,7 +216,7 @@ class Generate_widget extends CI_Controller {
                 @unlink("uploads/img_attention_window/" . $img_window['img_map']);
             }
 
-            //@unlink("widgets/widget_" . md5($id_widget) . ".js");
+            @unlink("widgets/widget_" . md5($id) . ".js");
         }
     }
 
@@ -212,7 +224,7 @@ class Generate_widget extends CI_Controller {
         if (!$this->authorization_model->check_auth()) {
             redirect('/p404', 'refresh');
         }
-        
+
         $data = $this->generate_widget_model->get_site_url_code_widget_by_id($id);
 
         if (empty($data)) {
@@ -264,16 +276,55 @@ class Generate_widget extends CI_Controller {
         if (!$this->authorization_model->check_auth()) {
             redirect('/p404', 'refresh');
         }
-        
+
         $id = $this->input->post('id');
         $active_status = $this->input->post('active_status');
 
         $this->generate_widget_model->update_field_is_active($id, $active_status);
 
-        /*if ($this->generate_widget($id_widget)) {
+        if ($this->generate_widget($id)) {
             echo "ok";
             exit;
-        }*/
+        }
+    }
+
+    private function generate_widget($id_widget = 0) {
+        $this->load->helper('file');
+        $this->load->library('zip');
+
+        $data = $this->generate_widget_model->generate_widget_body($id_widget);
+
+        if (write_file('widgets/widget_' . md5($id_widget) . '.js', $data)) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    public function sms_history_list() {
+        if (!$this->authorization_model->check_auth()) {
+            redirect('/admin/authorization/login', 'refresh');
+        }
+
+        $data['title'] = 'Собранные контакты';
+        $data['other_js'] = array('js/jquery.ba-throttle-debounce.min.js', 'js/jquery.stickyheader.js', 'js/jquery-ui.js', 'js/script.js', 'js/sms_history.js');
+        $data['other_css'] = array('css/jquery-ui.css');
+
+        if ($this->input->post()) {
+            $search_data = $this->input->post();
+
+            $data['search_data'] = $search_data;
+
+            $data['sms_history_list'] = $this->generate_widget_model->get_sms_history($search_data);
+        } else {
+            $data['sms_history_list'] = $this->generate_widget_model->get_sms_history();
+        }
+
+        $data['all_sites'] = $this->generate_widget_model->get_all_sites_from_history();
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('admin/generate_widget/sms_history_list', $data);
+        $this->load->view('templates/footer');
     }
 
 }
