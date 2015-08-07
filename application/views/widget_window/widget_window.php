@@ -15,19 +15,16 @@
                         Как доехать на<br> личном автомобиле
                     </h2>
                 <?php } ?>
-
                 <?php if (isset($html_pub_transport)) { ?>
                     <h2 id="title_pub_transport" <?php if ($who_first != 'pub_transport') { ?>class="hide_titel_section"<?php } ?>>
                         Как доехать на<br> общественном транспорте
                     </h2>
                 <?php } ?>
-
                 <?php if (isset($html_taxi)) { ?>
                     <h2 id="title_taxi" <?php if ($who_first != 'taxi') { ?>class="hide_titel_section"<?php } ?>>
                         Сколько стоит<br> доехать на такси
                     </h2>
                 <?php } ?>
-
                 <?php if (isset($html_rent_car)) { ?>
                     <h2 id="title_rent_car"<?php if ($who_first != 'rent_car') { ?>class="hide_titel_section"<?php } ?>>
                         Сколько стоит<br> аренда авто
@@ -65,7 +62,7 @@
             </div>
             <?php if (isset($html_priv_transport)) { ?>
                 <div class="serpentis_content_priv_transport" id="content_priv_transport">
-                    <!--<?= $html_priv_transport ?>-->
+                    <?= $html_priv_transport ?>
                 </div>
             <?php } ?>
             <?php if (isset($html_pub_transport)) { ?>
@@ -110,6 +107,9 @@
                     </form>
                 </div>
             <?php } ?>
+            <div class="serpentis_copyright">
+                Установите на ваш сайт виджет «<a href="http://serpentis.ru/widget" target="_blank">Как доехать?</a>»
+            </div>
         </div>
     </body>
 </html>

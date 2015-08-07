@@ -1,5 +1,5 @@
 <div class="component">
-    <h2>+ <a href="<?= base_url('/admin/generate_widget/widgets') ?>">Добавить виджет</a></h2>
+    <h2>+ <a href="<?= base_url('/admin/generate_widget/add_widget') ?>">Добавить виджет</a></h2>
     <form action="" method="post">
         <label for="search_url_site"></label>
         <input type="text" placeholder="Введите название сайта" class="search_url_site" id="search_url_site" name="search_url_site" value="<?php if(isset($search_data['search_url_site'])) { echo $search_data['search_url_site']; }?>"/>
@@ -73,8 +73,8 @@
                         <?php endforeach ?>
                     <?php } else { ?>
                     <tr class="empty_list">
-                        <td colspan="5" style="text-align: center;">
-                            "Конвертиков" нет
+                        <td colspan="4" style="text-align: center;">
+                            Записей нет
                         </td>
                     </tr>
                 <?php } ?>

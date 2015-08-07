@@ -203,10 +203,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
+        $data = $query->row_array();
 
-            $data = $query->row_array();
-
+        if (!empty($data)) {
             $result['id_priv_transport'] = $data['id_priv_transport'];
             $result['html_priv_transport'] = $data['html_priv_transport'];
         }
@@ -220,9 +219,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
-            $data = $query->row_array();
+        $data = $query->row_array();
 
+        if (!empty($data)) {
             $result['id_pub_transport'] = $data['id_pub_transport'];
             $result['html_pub_transport'] = $data['html_pub_transport'];
         }
@@ -236,9 +235,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
-            $data = $query->row_array();
+        $data = $query->row_array();
 
+        if (!empty($data)) {
             $result['id_taxi'] = $data['id_taxi'];
             $result['html_taxi'] = $data['html_taxi'];
         }
@@ -252,9 +251,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
-            $data = $query->row_array();
+        $data = $query->row_array();
 
+        if (!empty($data)) {
             $result['id_rent_car'] = $data['id_rent_car'];
             $result['html_rent_car'] = $data['html_rent_car'];
         }
@@ -384,10 +383,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
+        $data = $query->row_array();
 
-            $data = $query->row_array();
-
+        if (!empty($data)) {
             $result['html_priv_transport'] = htmlspecialchars_decode($data['html_priv_transport']);
         }
 
@@ -399,9 +397,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
-            $data = $query->row_array();
+        $data = $query->row_array();
 
+        if (!empty($data)) {
             $result['html_pub_transport'] = htmlspecialchars_decode($data['html_pub_transport']);
         }
 
@@ -413,9 +411,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
-            $data = $query->row_array();
+        $data = $query->row_array();
 
+        if (!empty($data)) {
             $result['html_taxi'] = htmlspecialchars_decode($data['html_taxi']);
         }
 
@@ -427,9 +425,9 @@ class Generate_widget_model extends CI_Model {
             return false;
         }
 
-        if (!empty($query->row_array())) {
-            $data = $query->row_array();
+        $data = $query->row_array();
 
+        if (!empty($data)) {
             $result['html_rent_car'] = htmlspecialchars_decode($data['html_rent_car']);
         }
 
