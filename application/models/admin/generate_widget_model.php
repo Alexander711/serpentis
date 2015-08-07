@@ -165,7 +165,7 @@ class Generate_widget_model extends CI_Model {
     public function check_exist_site($site_url, $id_widget = 0) {
         $query = $this->db->query("SELECT *
                                    FROM widgets
-                                   WHERE site_url = '" . mysql_real_escape_string($site_url) . "'");
+                                   WHERE site_url = '" . mysql_real_escape_string(strip_tags($site_url)) . "'");
 
         if (!$query) {
             return false;
@@ -262,22 +262,29 @@ class Generate_widget_model extends CI_Model {
         return $result;
     }
 
-    public function get_all_widgets() {
-        $query = $this->db->query("SELECT widgets.id,
-                                          widgets.site_url,
-                                          widgets.is_installed,
-                                          widgets.is_active,
-                                          priv_transport.html_priv_transport,
-                                          pub_transport.html_pub_transport,
-                                          taxi.html_taxi,
-                                          rent_car.html_rent_car
-                                   FROM widgets 
-                                   LEFT JOIN priv_transport ON widgets.id = priv_transport.id_widget
-                                   LEFT JOIN pub_transport ON widgets.id = pub_transport.id_widget
-                                   LEFT JOIN taxi ON widgets.id = taxi.id_widget
-                                   LEFT JOIN rent_car ON widgets.id = rent_car.id_widget
-                                   GROUP BY widgets.id");
+    public function get_all_widgets($search_data = '') {
+        $sql = "SELECT widgets.id,
+                       widgets.site_url,
+                       widgets.is_installed,
+                       widgets.is_active,
+                       priv_transport.html_priv_transport,
+                       pub_transport.html_pub_transport,
+                       taxi.html_taxi,
+                       rent_car.html_rent_car
+                FROM widgets 
+                LEFT JOIN priv_transport ON widgets.id = priv_transport.id_widget
+                LEFT JOIN pub_transport ON widgets.id = pub_transport.id_widget
+                LEFT JOIN taxi ON widgets.id = taxi.id_widget
+                LEFT JOIN rent_car ON widgets.id = rent_car.id_widget";
+        
+        if ($search_data != '') {
+            $sql .= " WHERE widgets.site_url LIKE '%" . mysql_real_escape_string(strip_tags($search_data['search_url_site'])) . "%'";
+        }
 
+        $sql .= " GROUP BY widgets.id";
+
+        $query = $this->db->query($sql);
+        
         if (!$query) {
             return false;
         }
@@ -359,7 +366,7 @@ class Generate_widget_model extends CI_Model {
                                           site_url,
                                           code_widget
                                    FROM widgets
-                                   WHERE code_widget = '" . mysql_real_escape_string($code) . "'");
+                                   WHERE code_widget = '" . mysql_real_escape_string(strip_tags($code)) . "'");
 
         if (!$query) {
             return false;
@@ -436,7 +443,7 @@ class Generate_widget_model extends CI_Model {
                                           users.id AS id_user
                                    FROM widgets
                                    JOIN users ON widgets.id_user = users.id
-                                   WHERE widgets.code_widget = '" . mysql_real_escape_string($code) . "'");
+                                   WHERE widgets.code_widget = '" . mysql_real_escape_string(strip_tags($code)) . "'");
 
         if (!$query) {
             return false;
@@ -488,7 +495,7 @@ class Generate_widget_model extends CI_Model {
             $string = '';
 
             if ($search_data['site_url'] != '') {
-                $string .= " WHERE site_url = '" . $search_data['site_url'] . "'";
+                $string .= " WHERE site_url = '" . mysql_real_escape_string(strip_tags($search_data['site_url'])) . "'";
             }
 
             if ($search_data['date_beginning'] != '') {
@@ -498,7 +505,7 @@ class Generate_widget_model extends CI_Model {
                     $string .= ' AND';
                 }
                 
-                $string .= " DATE_FORMAT(date_created,'%d-%m-%Y') >= '" . $search_data['date_beginning'] . "'";
+                $string .= " DATE_FORMAT(date_created,'%d-%m-%Y') >= '" . mysql_real_escape_string(strip_tags($search_data['date_beginning'])) . "'";
             }
 
             if ($search_data['date_end'] != '') {
@@ -508,7 +515,7 @@ class Generate_widget_model extends CI_Model {
                     $string .= ' AND';
                 }
                 
-                $string .= " DATE_FORMAT(date_created,'%d-%m-%Y') <= '" . $search_data['date_end'] . "'";
+                $string .= " DATE_FORMAT(date_created,'%d-%m-%Y') <= '" . mysql_real_escape_string(strip_tags($search_data['date_end'])) . "'";
             }
             
             $sql .= $string;

@@ -149,6 +149,34 @@ $(function () {
             }
         }
     });
+
+    $("#edit_user_data_form").submit(function (e) {
+        e.preventDefault();
+
+        var error_mass = validate_edit_form();
+        var error_mess = '';
+
+        if (error_mass.length == 0) {
+            $('.errors_edit_user').hide();
+
+            $.post("/admin/authorization/edit_user_data", $('#edit_user_data_form').serialize(), function (event) {
+                if (event.status_ajax == 'ok') {
+                    $('#user_name_aut').html(event.name + ' ' + event.last_name + "!");
+                    $('#user_email_aut').html('(' + event.email + ')');
+                    alert('Данные изменены');
+                } else {
+                    $('.errors_edit_user').html(event.error_mass);
+                    $('.errors_edit_user').show().delay(5000).fadeOut(1000);
+                }
+            }, 'json');
+        } else {
+            for (i = 0; i < error_mass.length; i++) {
+                error_mess = error_mess + '<span>' + error_mass[i] + '</span><br/>';
+                $('.errors_edit_user').html(error_mess);
+                $('.errors_edit_user').show().delay(5000).fadeOut(1000);
+            }
+        }
+    });
 });
 
 function validate_add_widget_form() {
@@ -223,6 +251,47 @@ function validate_login_form() {
 
     if ($("#login_form #pass_login_form").val().length < 6 && $('#login_form #pass_login_form').val() != '') {
         error_mass[error_mass.length] = 'Длина не меньше 6 символов';
+    }
+
+    return error_mass;
+}
+
+function validate_edit_form() {
+    var error_mass = new Array();
+
+    var name = $('#edit_user_data_form #name_user').val();
+    var last_name = $('#edit_user_data_form #last_name').val();
+    var email_user = $('#edit_user_data_form #email_user').val();
+    var pass = $("#edit_user_data_form #pass_user").val();
+    var confirm_pass = $('#edit_user_data_form #confirm_pass_user').val();
+    var phone = $('#edit_user_data_form #phone_user').val();
+
+    if (name == '') {
+        error_mass[error_mass.length] = 'Заполните поле "Имя"';
+    }
+
+    if (last_name == '') {
+        error_mass[error_mass.length] = 'Заполните поле "Фамилия"';
+    }
+
+    if (email_user == '') {
+        error_mass[error_mass.length] = 'Заполните поле "Email"';
+    }
+
+    if (pass.length < 6 && pass != '') {
+        error_mass[error_mass.length] = 'Длина поля "Пароль" должна быть не меньше 6 символов';
+    }
+
+    if (pass != confirm_pass) {
+        error_mass[error_mass.length] = 'Поля "Пароль" и "Подтвердить пароль" должны совпадать';
+    }
+
+    if (phone == '') {
+        error_mass[error_mass.length] = 'Заполните поле "Телефон"';
+    }
+
+    if (phone.length < 11 && phone != '') {
+        error_mass[error_mass.length] = 'Длина поля "Телефон" должна быть не меньше 11 символов';
     }
 
     return error_mass;

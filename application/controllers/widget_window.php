@@ -118,8 +118,8 @@ class Widget_window extends CI_Controller {
             'phone_contact' => mysql_real_escape_string(strip_tags($phone_client)),
             'status' => $sms_send_status,
             'type' => 'taxi',
-            'site_url' => $data['site_url'],
-            'id_user' => $data['id_user'],
+            'site_url' => mysql_real_escape_string($data['site_url']),
+            'id_user' => mysql_real_escape_string($data['id_user']),
         );
 
         $this->generate_widget_model->save_sms_history($data_sms_history);
@@ -221,8 +221,8 @@ class Widget_window extends CI_Controller {
             'phone_contact' => mysql_real_escape_string(strip_tags($phone_client)),
             'status' => $sms_send_status,
             'type' => 'rent_car',
-            'site_url' => $data['site_url'],
-            'id_user' => $data['id_user'],
+            'site_url' => mysql_real_escape_string($data['site_url']),
+            'id_user' => mysql_real_escape_string($data['id_user']),
         );
 
         $this->generate_widget_model->save_sms_history($data_sms_history);

@@ -23,7 +23,7 @@ $(function () {
                       </div>\
                       <div id=\"serpentis_attention_window\" onclick=\"serpentis_view_widget_window();\">\
                         <img id=\"serpentis_marker\" src=\"{IMG_MARKER}\">\
-                        <img src=\"{IMG_MAP}\">\
+                        <img id=\"serpentis_map\" src=\"{IMG_MAP}\">\
                       </div>';
 
         $('body').append(iframe);

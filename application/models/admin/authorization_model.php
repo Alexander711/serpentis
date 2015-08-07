@@ -13,8 +13,8 @@ class Authorization_model extends CI_Model {
     public function check_user($post_data) {
         $query = $this->db->query("SELECT *
                 FROM users
-                WHERE email = '" . mysql_real_escape_string($post_data['email_user'])
-                . "' AND pass = '" . md5(mysql_real_escape_string($post_data['pass'])) . "'");
+                WHERE email = '" . mysql_real_escape_string(strip_tags($post_data['email_user']))
+                . "' AND pass = '" . md5(mysql_real_escape_string(strip_tags($post_data['pass']))) . "'");
 
         if (!$query) {
             return false;
@@ -34,7 +34,7 @@ class Authorization_model extends CI_Model {
     public function check_email_exist($email_user) {
         $query = $this->db->query("SELECT *
                 FROM users
-                WHERE email = '" . mysql_real_escape_string($email_user) . "'");
+                WHERE email = '" . mysql_real_escape_string(strip_tags($email_user)) . "'");
 
         if (!$query) {
             return false;

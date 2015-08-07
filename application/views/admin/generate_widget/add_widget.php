@@ -84,7 +84,7 @@
         <br>
         <input type="submit" class="btn" value="Отправить"> 
 
-        <a href="<?= base_url('/admin/generate_widget/widgets'); ?>">
+        <a href="<?= base_url('/admin/generate_widget/widgets'); ?>" class="link_back">
             Назад
         </a>
     </form>

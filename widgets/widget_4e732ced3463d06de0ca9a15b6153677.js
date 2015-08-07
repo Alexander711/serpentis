@@ -22,8 +22,8 @@ $(function () {
                         <div id=\"serpentis_popup_overlay\" class=\"serpentis_popup_overlay\" onclick=\"serpentis_view_widget_window();\"></div> \
                       </div>\
                       <div id=\"serpentis_attention_window\" onclick=\"serpentis_view_widget_window();\">\
-                        <img id=\"serpentis_marker\" src=\"http://serpentis/uploads/img_attention_window/715536319cbf6b1691c25f37f2144fc8.jpg\">\
-                        <img id=\"serpentis_map\" src=\"http://serpentis/uploads/img_attention_window/03bfa2c8e72df2c239fb4bb0c8e54d63.jpg\">\
+                        <img id=\"serpentis_marker\" src=\"http://serpentis/uploads/img_attention_window/img_marker.png\">\
+                        <img id=\"serpentis_map\" src=\"http://serpentis/uploads/img_attention_window/img_map.png\">\
                       </div>';
 
         $('body').append(iframe);

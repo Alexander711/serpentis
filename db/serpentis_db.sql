@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Авг 07 2015 г., 00:28
+-- Время создания: Авг 07 2015 г., 12:22
 -- Версия сервера: 5.6.17
 -- Версия PHP: 5.5.12
 
@@ -75,14 +75,15 @@ CREATE TABLE IF NOT EXISTS `rent_car` (
   `html_rent_car` text,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `rent_car`
 --
 
 INSERT INTO `rent_car` (`id`, `id_widget`, `html_rent_car`, `create_date`) VALUES
-(1, 19, '&lt;iframe src=&quot;https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d44975.5323177505!2d33.359299449999995!3d45.207927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c01f8e9a222bad%3A0x67f29b22a55ab386!2z0JXQstC_0LDRgtC-0YDQuNGP!5e0!3m2!1sru!2sru!4v1438816415215&quot; width=&quot;487&quot; height=&quot;274&quot; frameborder=&quot;0&quot; style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;', '2015-08-04 13:02:59');
+(1, 19, '&lt;iframe src=&quot;https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d44975.5323177505!2d33.359299449999995!3d45.207927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c01f8e9a222bad%3A0x67f29b22a55ab386!2z0JXQstC_0LDRgtC-0YDQuNGP!5e0!3m2!1sru!2sru!4v1438816415215&quot; width=&quot;487&quot; height=&quot;274&quot; frameborder=&quot;0&quot; style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;', '2015-08-04 13:02:59'),
+(2, 26, '&lt;i&gt;ttttttt&lt;/i&gt;', '2015-08-07 10:06:07');
 
 -- --------------------------------------------------------
 
@@ -99,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `sms_history` (
   `status` varchar(255) DEFAULT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Дамп данных таблицы `sms_history`
@@ -113,7 +114,9 @@ INSERT INTO `sms_history` (`id`, `id_user`, `site_url`, `phone_contact`, `type`,
 (5, 2, 'test1', '+79788368085', 'taxi', '1', '2015-08-06 12:43:25'),
 (6, 2, 'test1', '+79788368085', 'taxi', '1', '2015-08-06 12:48:14'),
 (7, 2, 'test2', '+79788368085', 'rent_car', '1', '2015-08-06 13:11:15'),
-(8, 2, 'test1', '+79788368085', 'taxi', '1', '2015-08-06 13:12:47');
+(8, 2, 'test1', '+79788368085', 'taxi', '1', '2015-08-06 13:12:47'),
+(9, 2, 'test713', '+79788368085', 'taxi', '1', '2015-08-07 10:06:30'),
+(10, 2, 'test713', '+79788368085', 'rent_car', '1', '2015-08-07 10:06:41');
 
 -- --------------------------------------------------------
 
@@ -127,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `taxi` (
   `html_taxi` text,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `taxi`
@@ -135,7 +138,8 @@ CREATE TABLE IF NOT EXISTS `taxi` (
 
 INSERT INTO `taxi` (`id`, `id_widget`, `html_taxi`, `create_date`) VALUES
 (2, 18, 'dasadasdasd', '2015-08-02 13:13:53'),
-(3, 19, '&lt;iframe src=&quot;https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d45530.49524764703!2d34.1601309!3d44.501715999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4094c9077c8d204b%3A0x7c5f808a64d487ae!2z0K_Qu9GC0LA!5e0!3m2!1sru!2sru!4v1438816363123&quot; width=&quot;487&quot; height=&quot;274&quot; frameborder=&quot;0&quot; style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;', '2015-08-04 13:02:59');
+(3, 19, '&lt;iframe src=&quot;https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d45530.49524764703!2d34.1601309!3d44.501715999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4094c9077c8d204b%3A0x7c5f808a64d487ae!2z0K_Qu9GC0LA!5e0!3m2!1sru!2sru!4v1438816363123&quot; width=&quot;487&quot; height=&quot;274&quot; frameborder=&quot;0&quot; style=&quot;border:0&quot; allowfullscreen&gt;&lt;/iframe&gt;', '2015-08-04 13:02:59'),
+(4, 26, '&lt;strong&gt;echo&lt;/strong&gt;', '2015-08-07 09:52:18');
 
 -- --------------------------------------------------------
 
@@ -188,7 +192,7 @@ INSERT INTO `widgets` (`id`, `id_user`, `site_url`, `code_widget`, `is_installed
 (18, 2, 'test', '94803748292773508993934964654662', 0, 1, 'img_marker.png', 'img_map.png', '2015-08-02 13:13:53'),
 (19, 2, 'test711', '67390130130615277426728508565211', 0, 1, 'img_marker.png', 'img_map.png', '2015-08-02 13:22:13'),
 (20, 2, 'test5', '15271571216004447521262955674773', 0, 1, '8ff0ce6ded099dfaf5f5cf23af858944.jpg', '9a8f6fd747891d5c0d63d42b70db63ac.jpg', '2015-08-02 13:30:59'),
-(26, 2, 'test712', '97792562961768505360178153033941', 0, 1, '715536319cbf6b1691c25f37f2144fc8.jpg', '03bfa2c8e72df2c239fb4bb0c8e54d63.jpg', '2015-08-06 15:48:44');
+(26, 2, 'test713', '97792562961768505360178153033941', 0, 1, 'img_marker.png', 'img_map.png', '2015-08-06 15:48:44');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

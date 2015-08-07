@@ -116,10 +116,10 @@ $(function () {
                 }
             });
         } else if (validate == 'empty_phone') {
-            $('#serpentis_rent_car_form').trigger("reset");
+            $('#serpentis_taxi_form').trigger("reset");
             $('#serpentis_number_phone_taxi').attr("placeholder", 'Заполните поле!').css('border', "1px solid red");
         } else {
-            $('#serpentis_rent_car_form').trigger("reset");
+            $('#serpentis_taxi_form').trigger("reset");
             $('#serpentis_number_phone_taxi').attr("placeholder", 'Неправильный номер!').css('border', "1px solid red");
         }
     });

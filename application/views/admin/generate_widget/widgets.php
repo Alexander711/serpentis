@@ -1,5 +1,10 @@
 <div class="component">
-    <h2>+ <a href="<?= base_url('/admin/generate_widget/add_widget') ?>">Добавить виджет</a></h2>
+    <h2>+ <a href="<?= base_url('/admin/generate_widget/widgets') ?>">Добавить виджет</a></h2>
+    <form action="" method="post">
+        <label for="search_url_site"></label>
+        <input type="text" placeholder="Введите название сайта" class="search_url_site" id="search_url_site" name="search_url_site" value="<?php if(isset($search_data['search_url_site'])) { echo $search_data['search_url_site']; }?>"/>
+        <input type="submit" class="btn" value="Искать">
+    </form>
     <div class="table_body">
         <div class="add_widget_success"></div>
         <table>

@@ -186,7 +186,15 @@ class Generate_widget extends CI_Controller {
 
         $data['title'] = 'Список виджетов';
 
-        $data['all_widgets'] = $this->generate_widget_model->get_all_widgets();
+        if ($this->input->post()) {
+            $search_data = $this->input->post();
+
+            $data['search_data'] = $search_data;
+
+            $data['all_widgets'] = $this->generate_widget_model->get_all_widgets($search_data);
+        } else {
+            $data['all_widgets'] = $this->generate_widget_model->get_all_widgets();
+        }
 
         $data['other_js'] = array('js/jquery.ba-throttle-debounce.min.js',
             'js/jquery.stickyheader.js',
@@ -321,7 +329,7 @@ class Generate_widget extends CI_Controller {
         }
 
         $data['all_sites'] = $this->generate_widget_model->get_all_sites_from_history();
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('admin/generate_widget/sms_history_list', $data);
         $this->load->view('templates/footer');

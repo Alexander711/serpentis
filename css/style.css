@@ -13,7 +13,8 @@ body {
 
 .field_form,
 .input_sms_history_search,
-.select_sms_history_search {
+.select_sms_history_search,
+.search_url_site {
     border: 1px solid #BEBEBE;
     border-radius: 5px;
     color: #646464;
@@ -21,7 +22,8 @@ body {
     padding: 0 7px 0 15px;
 }
 
-.input_sms_history_search {
+.input_sms_history_search,
+.search_url_site {
     height: 28px;
 }
 
@@ -380,6 +382,10 @@ button,input,select,textarea {
 
 .container .login_page a {
     color: #000;
+}
+
+.link_back {
+    margin-left: 10px;
 }
 
 .login_form {

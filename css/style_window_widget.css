@@ -11,7 +11,7 @@
 
 .serpentis_title_window {
     height: 60px;
-    padding: 25px 10px;
+    padding: 20px 10px;
     vertical-align: middle;
     width: 466px;
 }
@@ -23,7 +23,7 @@
 
 .serpentis_menu_window {
     vertical-align: middle;
-    margin: 0;
+    margin-bottom: 5px;
     width: 487px;
     height: 35px;
 }
